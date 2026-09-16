@@ -1,0 +1,49 @@
+name: Android CI/CD
+
+on:
+  push:
+    branches: [ "main", "master", "develop" ]
+  pull_request:
+    branches: [ "main", "master", "develop" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      # Check if gradlew exists before running chmod to prevent errors on custom configurations
+      continue-on-error: true
+
+    - name: Build with Gradle
+      run: |
+        if [ -f gradlew ]; then
+          ./gradlew assembleDebug
+        else
+          gradle assembleDebug
+        fi
+
+    - name: Run Unit Tests
+      run: |
+        if [ -f gradlew ]; then
+          ./gradlew testDebugUnitTest
+        else
+          gradle testDebugUnitTest
+        fi
+
+    - name: Upload Build Artifacts (APK)
+      uses: actions/upload-artifact@v4
+      with:
+        name: android-debug-apk
+        path: app/build/outputs/apk/debug/*.apk

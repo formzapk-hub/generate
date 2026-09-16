@@ -1,0 +1,6 @@
+{
+  "name": "PDF to Word",
+  "description": "Convert PDF documents to editable Microsoft Word files, clean text formatting, search/replace easily, auto-save to local history, cloud backup, and schedule daily task reminders.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
